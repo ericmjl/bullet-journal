@@ -1,0 +1,13 @@
+name: bullet-journal
+channels:
+- defaults
+- conda-forge
+- ericmjl
+dependencies:
+- python=3.6
+- jupyter
+- jupyterlab
+- pyyaml
+- flask
+- python-dateutil
+- humanize
