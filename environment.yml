@@ -11,3 +11,4 @@ dependencies:
 - flask
 - python-dateutil
 - humanize
+- httplib2
