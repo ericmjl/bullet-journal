@@ -1,5 +1,6 @@
 from datetime import date, datetime
 
+import httplib2
 from dateutil.parser import parse
 
 from flask import Flask, render_template, redirect
@@ -28,17 +29,20 @@ def daily_log():
         d = parse(entry['date'])
         entry['humanized_date'] = humanize.naturaldate(d)
 
-    events = get_next_events(n=10)
     todays_events = []
-    for event in events:
-        d = parse(event['start']['dateTime'], ignoretz=True)
-        delta = humanize.naturaldelta(d - datetime.now())
-        d_human = humanize.naturaldate(d.date())
-        today = humanize.naturaldate(date.today())
-        if d_human == today and d > datetime.now():
-            event['start']['humanized_date'] = d_human
-            event['start']['humanized_delta'] = delta
-            todays_events.append(event)
+    try:
+        events = get_next_events(n=10)
+        for event in events:
+            d = parse(event['start']['dateTime'], ignoretz=True)
+            delta = humanize.naturaldelta(d - datetime.now())
+            d_human = humanize.naturaldate(d.date())
+            today = humanize.naturaldate(date.today())
+            if d_human == today and d > datetime.now():
+                event['start']['humanized_date'] = d_human
+                event['start']['humanized_delta'] = delta
+                todays_events.append(event)
+    except httplib2.ServerNotFoundError:
+        pass
 
     return render_template('dashboard.html.j2',
                            entries=entries['daily_log'],

@@ -12,3 +12,5 @@ dependencies:
 - python-dateutil
 - humanize
 - httplib2
+- pip:
+  - google-api-python-client

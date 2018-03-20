@@ -2,7 +2,7 @@
 {% from "macros/spacing.html.j2" import linebreaks %}
 
 {% block head %}
-	<meta http-equiv="refresh" content="60">
+	<meta http-equiv="refresh" content="10">
 	<style media="screen">
 		.vscroll-body {
 			overflow-y: scroll;
@@ -52,10 +52,12 @@
 								<li class="list-group-item {{ list_style }} list-group-item-action">
 									{% if item['kind'] == 'meeting' %}
 										<i class="far fa-clock"></i>
-									{% elif item['kind'] == 'todo' and item['complete'] == True %}
+									{% elif item['kind'] == 'todo' and item['status'] == 'complete' %}
 										<i class="fas fa-check-circle"></i>
-									{% elif item['kind'] == 'todo' and (item['complete'] == False or 'complete' not in item.keys()) %}
+									{% elif item['kind'] == 'todo' and 'status' not in item.keys() %}
 										<i class="far fa-circle"></i>
+									{% elif item['kind'] == 'todo' and item['status'] == 'deferred' %}
+										<i class="fas fa-chevron-right"></i>
 									{% elif item['kind'] == 'note' %}
 										<i class="far fa-sticky-note"></i>
 									{% endif %}
