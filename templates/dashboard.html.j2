@@ -22,7 +22,6 @@
 			z-index:2;
 			right:0; bottom:0; left:0;
 			height:20vh; /* adjust it to your needs */
-			background: url(data:image/svg+xml;base64,alotofcodehere);
 			background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 70%);
 			background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 70%);
 			background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 70%);
@@ -50,18 +49,26 @@
 						<ul class="list-group">
 							{% for item in entry['items'] %}
 								<li class="list-group-item {{ list_style }} list-group-item-action">
+									{% if item['status'] == 'deferred' %}
+										<i class="fas fa-chevron-right"></i>
+									{% endif %}
+
 									{% if item['kind'] == 'meeting' %}
 										<i class="far fa-clock"></i>
 									{% elif item['kind'] == 'todo' and item['status'] == 'complete' %}
 										<i class="fas fa-check-circle"></i>
-									{% elif item['kind'] == 'todo' and 'status' not in item.keys() %}
+									{% elif item['kind'] == 'todo' and ('status' not in item.keys() or item['status'] == 'deferred') %}
 										<i class="far fa-circle"></i>
-									{% elif item['kind'] == 'todo' and item['status'] == 'deferred' %}
-										<i class="fas fa-chevron-right"></i>
 									{% elif item['kind'] == 'note' %}
 										<i class="far fa-sticky-note"></i>
 									{% endif %}
-									{{ item['content'] }}
+
+									{% if item['status'] == 'cancelled' %}
+										<del>{{ item['content'] }}</del>
+									{% else %}
+									  {{ item['content'] }}
+									{% endif %}
+
 								</li>
 							{% endfor %}
 							<br>
